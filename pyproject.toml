@@ -3,5 +3,18 @@ name = "learn-cs244r"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.13"
-dependencies = []
+requires-python = ">=3.11"
+dependencies = [
+    "gymnasium[box2d]>=1.2.3",
+    "ipdb>=0.13.13",
+    "ipython>=9.10.0",
+    "matplotlib>=3.10.8",
+    "moviepy>=2.2.1",
+    "mujoco>=3.4.0",
+    "opencv-python>=4.13.0.92",
+    "pyvirtualdisplay>=3.0",
+    "swig>=4.4.1",
+    "tensorboard>=2.20.0",
+    "tensorboardx>=2.6.4",
+    "torch>=2.10.0",
+]

@@ -1,0 +1,16 @@
+mujoco
+# gym
+gymnasium
+tensorboard
+tensorboardX
+matplotlib
+ipython
+moviepy
+swig
+moviepy
+pyvirtualdisplay
+torch
+opencv-python
+ipdb
+# box2d-py
+gymnasium[box2d]
