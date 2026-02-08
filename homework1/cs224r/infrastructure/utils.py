@@ -7,16 +7,19 @@ Functions to edit:
     3. sample_n_trajectories (line 83)
 """
 import numpy as np
+import gym
 import time
+
+from cs224r.policies.base_policy import BasePolicy
 
 ############################################
 ############################################
 
 MJ_ENV_NAMES = ["Ant-v4", "Walker2d-v4", "HalfCheetah-v4", "Hopper-v4"]
-MJ_ENV_KWARGS = {name: {"render_mode": "rgb_array"} for name in MJ_ENV_NAMES}
+MJ_ENV_KWARGS: dict = {name: {"render_mode": "rgb_array"} for name in MJ_ENV_NAMES}
 MJ_ENV_KWARGS["Ant-v4"]["use_contact_forces"] = True
 
-def sample_trajectory(env, policy, max_path_length, render=False):
+def sample_trajectory(env:gym.Env, policy:BasePolicy, max_path_length, render=False):
     """
     Rolls out a policy and generates a trajectories
 
@@ -25,7 +28,7 @@ def sample_trajectory(env, policy, max_path_length, render=False):
     :render: whether to save images from the rollout
     """
     # Initialize environment for the beginning of a new rollout
-    ob = TODO # HINT: should be the output of resetting the env
+    ob = env.reset() # HINT: should be the output of resetting the env
 
     # Initialize data storage for across the trajectory
     # You'll mainly be concerned with: obs (list of observations), acs (list of actions)
@@ -45,7 +48,8 @@ def sample_trajectory(env, policy, max_path_length, render=False):
 
         # Use the most recent observation to decide what to do
         obs.append(ob)
-        ac = TODO # HINT: Query the policy's get_action function
+        assert isinstance(ob[0], np.ndarray) # ob[0] is the ob, ob[1] is extra info
+        ac = policy.get_action(ob[0]) # HINT: Query the policy's get_action function
         ac = ac[0]
         acs.append(ac)
 
@@ -59,7 +63,10 @@ def sample_trajectory(env, policy, max_path_length, render=False):
 
         # TODO end the rollout if the rollout ended
         # HINT: rollout can end due to done, or due to max_path_length
-        rollout_done = TODO # HINT: this is either 0 or 1
+        rollout_done = 0 # HINT: this is either 0 or 1
+        if done or steps >= max_path_length:
+            rollout_done = 1
+
         terminals.append(rollout_done)
 
         if rollout_done:
