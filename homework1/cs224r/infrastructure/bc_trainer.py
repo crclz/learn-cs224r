@@ -205,7 +205,17 @@ class BCTrainer:
         # HINT3: To collect data, you might want to use pre-existing sample_trajectories code from utils
         # HINT4: You want each of these collected rollouts to be of length self.params['ep_len']
 
+
+
         print("\nCollecting data to be used for training...")
+
+        # TODO: iter=0 shits
+        if iter == 0:
+            initial_expert_data = pickle.load(load_initial_expertdata)
+        
+        # collect data
+        utils.sample_trajectories(self.env, collect_policy, self.params['ep_len'], )
+
         paths, envsteps_this_batch = TODO
 
         # collect more rollouts with the same policy, to be saved as videos in tensorboard

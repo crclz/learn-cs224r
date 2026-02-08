@@ -5,17 +5,17 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
-    "box2d-py>=2.3.8",
+    "box2d-py==2.3.8",
     "gym==0.25.2",
-    "ipdb>=0.13.13",
-    "ipython>=9.10.0",
-    "matplotlib>=3.10.8",
-    "moviepy>=2.2.1",
-    "mujoco>=3.4.0",
-    "opencv-python>=4.13.0.92",
-    "pyvirtualdisplay>=3.0",
-    "swig>=4.4.1",
-    "tensorboard>=2.20.0",
-    "tensorboardx>=2.6.4",
+    "ipdb==0.13.13",
+    "ipython==9.0.2",
+    "matplotlib==3.10.1",
+    "moviepy==1.0.3",
+    "mujoco==2.3.3",
+    "opencv-python==4.11.0.86",
+    "pyvirtualdisplay==3.0",
+    "swig==4.3.0",
+    "tensorboard==2.19.0",
+    "tensorboardx==2.6.2.2",
     "torch>=2.10.0",
 ]
