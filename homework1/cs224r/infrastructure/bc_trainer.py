@@ -214,7 +214,7 @@ class BCTrainer:
             initial_expert_data = pickle.load(load_initial_expertdata)
         
         # collect data
-        utils.sample_trajectories(self.env, collect_policy, self.params['ep_len'], )
+        utils.sample_trajectories(self.env, collect_policy,  )
 
         paths, envsteps_this_batch = TODO
 
