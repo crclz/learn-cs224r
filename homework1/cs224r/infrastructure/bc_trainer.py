@@ -182,13 +182,13 @@ class BCTrainer:
     ####################################
 
     def collect_training_trajectories(
-            self,
-            itr,
-            load_initial_expertdata,
-            collect_policy
+        self,
+        itr,
+        load_initial_expertdata,
+        collect_policy
     ):
         """
-        :param itr:
+        :param itr: current iteration number
         :param load_initial_expertdata: path to expert data pkl file
         :param collect_policy: the current policy using which we collect data
         :return:
@@ -202,21 +202,26 @@ class BCTrainer:
         # want to handle loading from expert data, and if the data doesn't exist, collect an appropriate
         # number of transitions.
         # HINT2: Loading from expert transitions can be done using pickle.load()
-        # HINT3: To collect data, you might want to use pre-existing sample_trajectories code from utils
+        # x HINT3: To collect data, you might want to use pre-existing sample_trajectories code from utils
         # HINT4: You want each of these collected rollouts to be of length self.params['ep_len']
 
 
 
         print("\nCollecting data to be used for training...")
 
-        # TODO: iter=0 shits
-        if iter == 0:
-            initial_expert_data = pickle.load(load_initial_expertdata)
-        
-        # collect data
-        utils.sample_trajectories(self.env, collect_policy,  )
+        if itr == 0:
+            # initial_expert_data is List[return type of Path]
+            with open(load_initial_expertdata, 'rb') as f:
+                paths = pickle.load(f)
+            
+            envsteps_this_batch = sum([len(p['observation']) for p in paths])
+        else:
+            batch_size = self.params['batch_size']
+            ep_len = self.params['ep_len']
+            paths, envsteps_this_batch = utils.sample_trajectories(self.env, collect_policy, batch_size, ep_len, render=False )
 
-        paths, envsteps_this_batch = TODO
+        assert paths
+        assert envsteps_this_batch
 
         # collect more rollouts with the same policy, to be saved as videos in tensorboard
         # note: here, we collect MAX_NVIDEO rollouts, each of length MAX_VIDEO_LEN

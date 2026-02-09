@@ -89,6 +89,7 @@ def sample_trajectories(env, policy, min_timesteps_per_batch, max_path_length, r
         # TODO
         path = sample_trajectory(env, policy, max_path_length, render=render)
         paths.append(path)
+        assert len(path['observation']) == len(path['action'])
         timesteps_this_batch += len(path['observation'])
 
 
@@ -103,7 +104,8 @@ def sample_n_trajectories(env, policy, ntraj, max_path_length, render=False):
     """
     paths = []
         
-    TODO
+    for _ in range(ntraj):
+        sample_trajectory(env, policy, max_path_length, render=render)
 
     return paths
 
