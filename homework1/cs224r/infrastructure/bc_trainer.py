@@ -274,6 +274,9 @@ class BCTrainer:
         # and replace paths[i]["action"] with these expert labels
 
         for path in paths:
+            assert isinstance(path["action"], np.ndarray)
+            assert isinstance(path['observation'], np.ndarray)
+
             path["action"] = expert_policy.get_action(path['observation'])
 
 
