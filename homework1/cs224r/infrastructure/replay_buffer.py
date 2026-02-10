@@ -128,8 +128,13 @@ class ReplayBuffer():
         ## HINT 3: look at the sample_recent_data function below
         ## Note that rews, next_obs, and terminals are not used for BC
 
-        raise NotImplementedError
-    
+        assert batch_size <= self.obs.shape[0]
+
+        x = np.random.permutation(self.obs.shape[0])
+        x = x[:batch_size]
+        return self.obs[x], self.acs[x], self.rews[x], self.next_obs[x], self.terminals[x]
+
+
     def sample_recent_data(self, batch_size=1):
         """
         Samples a batch of the most recent transitions transitions
