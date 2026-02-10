@@ -111,7 +111,7 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
 
         observation = ptu.from_numpy(observation)
 
-        assert isinstance(observation, torch.FloatTensor)
+        # assert isinstance(observation, torch.FloatTensor)
 
         dist = self.forward(observation)
         output = dist.sample()
@@ -155,6 +155,13 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         """
         # TODO: update the policy and return the loss. Recall that to update the policy
         # you need to backpropagate the gradient and step the optimizer.
+
+        assert isinstance(observations, np.ndarray)
+        assert isinstance(actions, np.ndarray)
+
+        observations = ptu.from_numpy(observations)
+        actions = ptu.from_numpy(actions)
+
         dist = self.forward(observations)
         # assert isinstance(dist, torch.distributions.Normal)
 
