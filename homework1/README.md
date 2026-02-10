@@ -31,12 +31,16 @@ Tip: While debugging, you probably want to keep the flag `--video_log_freq -1` w
 Command for problem 1:
 
 ```
-python cs224r/scripts/run_hw1.py \
-	--expert_policy_file cs224r/policies/experts/Ant.pkl \
-	--env_name Ant-v4 --exp_name bc_ant --n_iter 1 \
-	--expert_data cs224r/expert_data/expert_data_Ant-v4.pkl \
-	--video_log_freq -1
+$env:PYTHONPATH="."
+
+python cs224r/scripts/run_hw1.py `
+    --expert_policy_file cs224r/policies/experts/Ant.pkl `
+    --env_name Ant-v4 --exp_name bc_ant --n_iter 1 `
+    --expert_data cs224r/expert_data/expert_data_Ant-v4.pkl `
+    --video_log_freq -1
 ```
+
+- [ ] A policy that achieves greater than 30% of the expert on the Ant task will receive full credit on the autograder.
 
 Make sure to also try another environment.
 See the homework PDF for more details on what else you need to run.

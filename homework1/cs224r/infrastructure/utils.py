@@ -48,8 +48,9 @@ def sample_trajectory(env:gym.Env, policy:BasePolicy, max_path_length, render=Fa
 
         # Use the most recent observation to decide what to do
         obs.append(ob)
-        assert isinstance(ob[0], np.ndarray) # ob[0] is the ob, ob[1] is extra info
-        ac = policy.get_action(ob[0]) # HINT: Query the policy's get_action function
+        assert isinstance(ob, np.ndarray)
+        ac = policy.get_action(ob) # HINT: Query the policy's get_action function
+        assert ac.shape[0] == 1
         ac = ac[0]
         acs.append(ac)
 
