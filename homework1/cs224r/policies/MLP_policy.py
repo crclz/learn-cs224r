@@ -109,9 +109,15 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         # observation is of shape (batch_size, dim_ob)
         assert len(observation.shape) == 2
 
-        output = self.forward(observation)
+        observation = ptu.from_numpy(observation)
 
-        return output.sample()
+        assert isinstance(observation, torch.FloatTensor)
+
+        dist = self.forward(observation)
+        output = dist.sample()
+        output = ptu.to_numpy(output)
+
+        return output
     
 
     def forward(self, observation: torch.FloatTensor) -> Any:
@@ -149,8 +155,8 @@ class MLPPolicySL(BasePolicy, nn.Module, metaclass=abc.ABCMeta):
         """
         # TODO: update the policy and return the loss. Recall that to update the policy
         # you need to backpropagate the gradient and step the optimizer.
-        dist = self.get_action(observations)
-        assert isinstance(dist, torch.distributions.Normal)
+        dist = self.forward(observations)
+        # assert isinstance(dist, torch.distributions.Normal)
 
         loss = -dist.log_prob(actions).mean()
 
