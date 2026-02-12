@@ -278,6 +278,8 @@ class BCTrainer:
             assert isinstance(path['observation'], np.ndarray)
 
             path["action"] = expert_policy.get_action(path['observation'])
+        
+        return paths
 
 
     ####################################

@@ -56,11 +56,18 @@ To generate videos of the policy, remove the `--video_log_freq -1` flag.
 Command for section 1:
 (Note the `--do_dagger` flag, and the higher value for `n_iter`)
 
-```
-python cs224r/scripts/run_hw1.py \
-    --expert_policy_file cs224r/policies/experts/Ant.pkl \
-    --env_name Ant-v4 --exp_name dagger_ant --n_iter 10 \
-    --do_dagger --expert_data cs224r/expert_data/expert_data_Ant-v4.pkl \
+```pwsh
+$game="Ant" # iter0: 97%, iter9: 104%
+$game="HalfCheetah" # iter0: 89%, iter9: 98%
+$game="Hopper" # iter0: 29%, iter9: 100%
+$game="Walker2d" # iter0: 560/5566, iter9: 101%
+
+$env:PYTHONPATH="."
+
+python cs224r/scripts/run_hw1.py `
+    --expert_policy_file cs224r/policies/experts/${game}.pkl `
+    --env_name ${game}-v4 --exp_name dagger_${game} --n_iter 10 `
+    --do_dagger --expert_data cs224r/expert_data/expert_data_${game}-v4.pkl `
     --video_log_freq -1
 ```
 
