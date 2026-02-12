@@ -30,13 +30,19 @@ Tip: While debugging, you probably want to keep the flag `--video_log_freq -1` w
 ### Section 1 (Behavior Cloning)
 Command for problem 1:
 
-```
+```pwsh
+
+$game="Ant" # 好
+$game="HalfCheetah" # 好
+$game="Hopper" # 差
+$game="Walker2d" # 差
+
 $env:PYTHONPATH="."
 
 python cs224r/scripts/run_hw1.py `
-    --expert_policy_file cs224r/policies/experts/Ant.pkl `
-    --env_name Ant-v4 --exp_name bc_ant --n_iter 1 `
-    --expert_data cs224r/expert_data/expert_data_Ant-v4.pkl `
+    --expert_policy_file cs224r/policies/experts/${game}.pkl `
+    --env_name ${game}-v4 --exp_name bc_${game} --n_iter 1 `
+    --expert_data cs224r/expert_data/expert_data_${game}-v4.pkl `
     --video_log_freq -1
 ```
 
