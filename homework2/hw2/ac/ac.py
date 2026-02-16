@@ -185,5 +185,17 @@ class ACAgent:
 
         ### YOUR CODE HERE ###
 
+        assert len(obs.shape) == 2 # (batch, D)
+
+        dist = self.actor(obs)
+
+        loss = -dist.log_prob(action)
+
+        metrics["loss"] = loss.item()
+
+        self.actor_opt.zero_grad()
+        loss.backward()
+        self.actor_opt.step()
+
 
         return metrics

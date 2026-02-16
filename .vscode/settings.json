@@ -1,5 +1,8 @@
 {
     "python.analysis.extraPaths": [
         "homework1"
+    ],
+    "python.autoComplete.extraPaths": [
+        "homework2/hw2/ac"
     ]
 }
