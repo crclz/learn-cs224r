@@ -14,9 +14,20 @@ Press Enter to exit ...
 ```
 
 ### Run an example
-```
+```bash
+mkdir videos # add this, or the process will run infinitely
+
 ./build/bin/mjpc --task="Quadruped Flat" --steps=100 \
 --horizon=0.35 --w0=0.0 --w1=0.0 --w2=0.0 --w3=0.0
+
+
+# my params:
+./build/bin/mjpc --task="Quadruped Flat" --steps=100 \
+--horizon=0.35 --w0=2.5 --w1=0.5 --w2=0.3 --w3=-0.6
+
+avi_file=quadruped_planH_0.350000_w0_2.500000_w1_0.500000_w2_0.300000_w3_-0.600000.avi
+ffmpeg -i videos/${avi_file}{,.mp4}
+rm videos/${avi_file}
 ```
 
 The expected result should be

@@ -60,7 +60,7 @@ findorfetch(
   LIBRARY_NAME
   mujoco
   GIT_REPO
-  https://github.com/google-deepmind/mujoco.git
+  git@code.byted.org:chenhongrui.chr/mujoco.git
   GIT_TAG
   dfd463cdb5cd315e9fb20b518f0fbbf4ac018de2 # 2.3.3
   TARGETS
