@@ -16,7 +16,7 @@ dependencies:
   - pip:
     - termcolor==1.1.0
     - dm_control
-    - tb-nightly
+    - tensorboard
     - imageio==2.9.0
     - imageio-ffmpeg==0.4.4
     - hydra-core==1.1.0

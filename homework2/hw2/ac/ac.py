@@ -206,11 +206,20 @@ class ACAgent:
 
         assert len(obs.shape) == 2
 
-        actions = self.actor.forward(obs)
+        batch_size = obs.shape[0]
+
+        actions = self.actor.forward(obs).rsample()
 
         q_values = self.critic.forward(obs, actions)
+        critic_count = len(q_values)
 
-        loss = - sum(q_values) / len(q_values)
+        assert q_values[0].shape == (batch_size, 1), f'q_values[0].shape is {q_values[0].shape}'
+
+        q_values = torch.concat(q_values, 1).squeeze(-1)
+
+        assert q_values.shape == (batch_size, critic_count), f'q_values.shape is {q_values.shape}'
+
+        loss = -1 * q_values.sum(1).mean()
 
         metrics["update_actor_loss"] = loss.item()
 
