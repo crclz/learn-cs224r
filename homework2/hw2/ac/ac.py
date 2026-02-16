@@ -132,24 +132,24 @@ class ACAgent:
 
         assert target_critic_outputs.shape == (batch_size, target_critic_count, 1), f'actual shape is: {target_critic_outputs.shape}'
 
-        perm_indices_per_batch = torch.stack([torch.randperm(target_critic_count) for _ in range(batch_size)])
-        perm_indices_per_batch = perm_indices_per_batch.unsqueeze(-1)
+        # perm_indices_per_batch = torch.stack([torch.randperm(target_critic_count) for _ in range(batch_size)])
+        # perm_indices_per_batch = perm_indices_per_batch.unsqueeze(-1)
 
-        assert perm_indices_per_batch.shape == (batch_size, target_critic_count, 1), f'actual shape is: {perm_indices_per_batch.shape}'
+        # assert perm_indices_per_batch.shape == (batch_size, target_critic_count, 1), f'actual shape is: {perm_indices_per_batch.shape}'
 
-        target_critic_outputs = target_critic_outputs.gather(1, perm_indices_per_batch)
+        # target_critic_outputs = target_critic_outputs.gather(1, perm_indices_per_batch)
 
-        sample_two = target_critic_outputs[:,:2,:].squeeze(-1)
-        assert sample_two.shape == (batch_size, 2)
+        # sample_two = target_critic_outputs[:,:2,:].squeeze(-1)
+        # assert sample_two.shape == (batch_size, 2)
 
-        min_critic = sample_two.min(1, keepdim=True).values
+        min_critic = target_critic_outputs.squeeze(-1).min(1, keepdim=True).values
         assert min_critic.shape == (batch_size,1), f'min_critic.shape is {min_critic.shape}'
 
         y = reward + discount * min_critic
         assert y.shape == (batch_size, 1), f'y.shape is {y.shape}, discount is {discount.shape}, min_critic is {min_critic.shape}'
 
         # compute the loss
-        critic_outputs = self.critic.forward(next_obs, next_action)
+        critic_outputs = self.critic.forward(obs, action)
 
         loss = torch.zeros(1)
         for critic_out in critic_outputs:
@@ -219,7 +219,7 @@ class ACAgent:
 
         assert q_values.shape == (batch_size, critic_count), f'q_values.shape is {q_values.shape}'
 
-        loss = -1 * q_values.sum(1).mean()
+        loss = -1 * q_values.mean(1).mean()
 
         metrics["update_actor_loss"] = loss.item()
 
