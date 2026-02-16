@@ -120,11 +120,11 @@ class ACAgent:
 
         batch_size = next_obs.shape[0]
 
-        next_action = self.act(next_obs, False)
+        next_action = self.actor.forward(next_obs).rsample()
         next_action =  torch.as_tensor(next_action, device=self.device)
 
         # run target critic nets to calculate Q
-        next_obs = torch.as_tensor(next_obs, device=self.device)
+        # next_obs = torch.as_tensor(next_obs, device=self.device)
         target_critic_outputs = self.critic_target.forward(next_obs, next_action)
         target_critic_outputs = [p.unsqueeze(1) for p in target_critic_outputs]
         target_critic_count = len(target_critic_outputs)
@@ -145,18 +145,24 @@ class ACAgent:
         min_critic = target_critic_outputs.squeeze(-1).min(1, keepdim=True).values
         assert min_critic.shape == (batch_size,1), f'min_critic.shape is {min_critic.shape}'
 
+        assert reward.shape == (batch_size, 1), f'reward.shape is {reward.shape}'
+        assert discount.shape == (batch_size, 1), f'discount.shape is {discount.shape}'
+
         y = reward + discount * min_critic
         assert y.shape == (batch_size, 1), f'y.shape is {y.shape}, discount is {discount.shape}, min_critic is {min_critic.shape}'
+
+        sg_y = y.detach() # do not send Q's gradient back to target critic
 
         # compute the loss
         critic_outputs = self.critic.forward(obs, action)
 
-        loss = torch.zeros(1)
+        loss = torch.zeros((batch_size, 1))
         for critic_out in critic_outputs:
             assert critic_out.shape == (batch_size, 1), f'critic_out.shape is {critic_out.shape}'
 
-            sg_y = y.detach() # do not send Q's gradient back to target critic
-            loss += ((critic_out - sg_y)**2).sum()
+            loss += ((critic_out - sg_y)**2)
+
+        loss = loss.mean()
 
         metrics["update_critic_loss"] = loss.item()
 
