@@ -179,6 +179,20 @@ class ACAgent:
 
         ### YOUR CODE HERE ###
 
+        assert len(obs.shape) == 2
+
+        actions = self.actor.forward(obs)
+
+        q_values = self.critic.forward(obs, actions)
+
+        loss = - sum(q_values) / len(q_values)
+
+        metrics["loss"] = loss.item()
+
+        self.actor_opt.zero_grad()
+        loss.backward()
+        self.actor_opt.step()
+
 
         return metrics
 
