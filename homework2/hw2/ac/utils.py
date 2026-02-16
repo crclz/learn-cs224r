@@ -44,7 +44,6 @@ def soft_update_params(net, target_net, tau):
 def to_torch(xs, device):
     return tuple(torch.as_tensor(x, device=device) for x in xs)
 
-
 def weight_init(m):
     if isinstance(m, nn.Linear):
         nn.init.orthogonal_(m.weight.data)
