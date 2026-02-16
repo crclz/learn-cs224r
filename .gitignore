@@ -1,3 +1,7 @@
+.DS_Store
+*.avi
+homework2/hw2_starter_code.zip
+
 # Python-generated files
 __pycache__/
 *.py[oc]
