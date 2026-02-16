@@ -135,6 +135,8 @@ class ACAgent:
             sg_y = y.item() # do not send Q's gradient back to target critic
             loss += (critic_out - sg_y)**2
 
+        metrics["update_critic_loss"] = loss.item()
+
         # d: take gradient step
         self.critic_opt.zero_grad()
         loss.backward()
@@ -187,7 +189,7 @@ class ACAgent:
 
         loss = - sum(q_values) / len(q_values)
 
-        metrics["loss"] = loss.item()
+        metrics["update_actor_loss"] = loss.item()
 
         self.actor_opt.zero_grad()
         loss.backward()
@@ -232,7 +234,7 @@ class ACAgent:
 
         loss = -dist.log_prob(action)
 
-        metrics["loss"] = loss.item()
+        metrics["bc_loss"] = loss.item()
 
         self.actor_opt.zero_grad()
         loss.backward()
