@@ -118,6 +118,33 @@ class ACAgent:
 
         ### YOUR CODE HERE ###
 
+        next_action = self.act(next_obs, False) + discount
+
+        # run target critic nets to calculate Q
+        target_critic_outputs = self.critic_target.forward(next_obs, next_action)
+        sample_two = random.choices(target_critic_outputs, k=2)
+        min_critic = min([p for p in sample_two]).item
+
+        y = reward + discount * min_critic
+
+        # compute the loss
+        critic_outputs = self.critic.forward(next_obs, next_action)
+
+        loss = torch.zeros(1)
+        for critic_out in critic_outputs:
+            sg_y = y.item() # do not send Q's gradient back to target critic
+            loss += (critic_out - sg_y)**2
+
+        # d: take gradient step
+        self.critic_opt.zero_grad()
+        loss.backward()
+        self.critic_opt.step()
+
+        # e: Update the target critic parameters, soft
+        # self.critic: 在 update_critic 中主要被使用
+        # self.critic_target: 用于估计Q值的，在训练actor时被使用
+        utils.soft_update_params(self.critic, self.critic_target, self.critic_target_tau)
+
 
         #####################
         return metrics
