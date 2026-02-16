@@ -121,7 +121,7 @@ class ACAgent:
         batch_size = next_obs.shape[0]
 
         next_action = self.actor.forward(next_obs).rsample()
-        next_action =  torch.as_tensor(next_action, device=self.device)
+        # next_action =  torch.as_tensor(next_action, device=self.device)
 
         # run target critic nets to calculate Q
         # next_obs = torch.as_tensor(next_obs, device=self.device)
