@@ -127,10 +127,16 @@ class ACAgent:
         # next_obs = torch.as_tensor(next_obs, device=self.device)
         target_critic_outputs = self.critic_target.forward(next_obs, next_action)
         target_critic_outputs = [p.unsqueeze(1) for p in target_critic_outputs]
-        target_critic_count = len(target_critic_outputs)
+
+        target_critic_outputs = random.sample(target_critic_outputs, 2)
+
+        # target_critic_count = len(target_critic_outputs)
         target_critic_outputs = torch.concat(target_critic_outputs, 1)
 
-        assert target_critic_outputs.shape == (batch_size, target_critic_count, 1), f'actual shape is: {target_critic_outputs.shape}'
+        assert target_critic_outputs.shape == (batch_size, 2, 1), f'actual shape is: {target_critic_outputs.shape}'
+
+        # 感觉随机选择怎样都无所谓，例如dropout也是在batch内drop同样的神经元
+        # 所以我们也可以在batch内随机选择两个critic
 
         # perm_indices_per_batch = torch.stack([torch.randperm(target_critic_count) for _ in range(batch_size)])
         # perm_indices_per_batch = perm_indices_per_batch.unsqueeze(-1)
@@ -156,7 +162,7 @@ class ACAgent:
         # compute the loss
         critic_outputs = self.critic.forward(obs, action)
 
-        loss = torch.zeros((batch_size, 1))
+        loss = 0
         for critic_out in critic_outputs:
             assert critic_out.shape == (batch_size, 1), f'critic_out.shape is {critic_out.shape}'
 
