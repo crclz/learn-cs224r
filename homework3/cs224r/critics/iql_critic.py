@@ -46,7 +46,11 @@ class IQLCritic(BaseCritic):
         # HINT: see Q_net definition above and optimizer below
         # HINT: Define using same hparams as Q_net, but adjust output dimensions
         ### YOUR CODE START HERE ###
-        self.v_net = None
+
+        # q_net output q values of all actions.
+        # v_net output 1 v value for status (aka ob)
+        self.v_net = network_initializer(self.ob_dim, 1)
+
         ### YOUR CODE END HERE ###
 
         self.v_optimizer = self.optimizer_spec.constructor(
@@ -66,6 +70,10 @@ class IQLCritic(BaseCritic):
         # in the problem statement.
         ### YOUR CODE START HERE ###
         #pass
+
+        # 这不是都补全了吗？
+
+        # when diff > 0 zeta else abs(zeta-1). zeta belongs to (0,1), so abs(zeta-1) = 1-zeta
         weight = torch.where(diff > 0, ptu.from_numpy(np.array(self.iql_expectile)), ptu.from_numpy(np.array(1 -  self.iql_expectile)))
         return weight * (diff**2)
         ### YOUR CODE END HERE ###
@@ -84,6 +92,28 @@ class IQLCritic(BaseCritic):
         # passing in the difference between the computed targets and predictions
         ### YOUR CODE START HERE ###
         value_loss = None
+
+        assert len(ob_no.shape) == 2, f'ob_no.shape is {ob_no.shape}'
+        batch_size, ob_dim = ob_no.shape
+
+        assert len(ac_na.shape) == 2, f'ac_na.shape is {ac_na.shape}'
+        assert ac_na.shape[0] == batch_size, f'ac_na.shape is {ac_na.shape}'
+        assert ac_na.shape[1] == 1, f'ac_na.shape is {ac_na.shape}'
+
+        computed_target = self.q_net_target.forward(ob_no) # (batch_size, action_dim)
+
+        computed_target = computed_target.gather(ac_na)
+
+        assert computed_target.shape == (batch_size, 1), f'computed_target.shape is {computed_target.shape}'
+
+        prediction = self.v_net.forward(ob_no)
+
+        assert prediction.shape == (batch_size, 1), f'prediction.shape is {prediction.shape}'
+
+        value_loss = self.expectile_loss(prediction-computed_target)
+        assert value_loss.shape == (batch_size, 1), f'value_loss.shape is {value_loss}'
+
+
         ### YOUR CODE END HERE ###
         
 
