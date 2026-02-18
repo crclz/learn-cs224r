@@ -124,11 +124,17 @@ class IQLAgent(DQNAgent):
             # TODO 2): Calculate the awac actor loss
             
             ### YOUR CODE START HERE ###
+            # ob_no = ptu.from_numpy(ob_no)
+            # ac_na = ptu.from_numpy(ac_na).to(torch.long)
+            # next_ob_no = ptu.from_numpy(next_ob_no)
+            # reward_n = ptu.from_numpy(reward_n)
+            # terminal_n = ptu.from_numpy(terminal_n)
+
             advantage = self.estimate_advantage(ob_no, ac_na, re_n, next_ob_no, terminal_n)
 
-            dist = self.awac_actor.forward(ob_no)
+            dist = self.awac_actor.forward(ptu.from_numpy(ob_no))
 
-            x = dist.log_prob(ac_na) * torch.exp(1 / self.awac_actor.lambda_awac * advantage)
+            x = dist.log_prob(ptu.from_numpy(ac_na).to(torch.long)) * torch.exp(1 / self.awac_actor.lambda_awac * advantage)
 
             actor_loss = -x.mean()
 

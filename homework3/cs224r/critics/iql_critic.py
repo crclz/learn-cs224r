@@ -96,13 +96,14 @@ class IQLCritic(BaseCritic):
         assert len(ob_no.shape) == 2, f'ob_no.shape is {ob_no.shape}'
         batch_size, ob_dim = ob_no.shape
 
+        ac_na = ac_na.unsqueeze(-1)
         assert len(ac_na.shape) == 2, f'ac_na.shape is {ac_na.shape}'
         assert ac_na.shape[0] == batch_size, f'ac_na.shape is {ac_na.shape}'
         assert ac_na.shape[1] == 1, f'ac_na.shape is {ac_na.shape}'
 
         computed_target = self.q_net_target.forward(ob_no) # (batch_size, action_dim)
 
-        computed_target = computed_target.gather(ac_na)
+        computed_target = computed_target.gather(1, ac_na)
 
         assert computed_target.shape == (batch_size, 1), f'computed_target.shape is {computed_target.shape}'
 
@@ -113,6 +114,7 @@ class IQLCritic(BaseCritic):
         value_loss = self.expectile_loss(prediction-computed_target)
         assert value_loss.shape == (batch_size, 1), f'value_loss.shape is {value_loss}'
 
+        value_loss = value_loss.mean()
 
         ### YOUR CODE END HERE ###
         
@@ -150,7 +152,10 @@ class IQLCritic(BaseCritic):
 
         assert next_ob_no.shape == ob_no.shape, f'next_ob_no.shape is {next_ob_no.shape}'
 
+        reward_n = reward_n.unsqueeze(-1)
         assert reward_n.shape == (batch_size, 1), f'reward_n.shape is {reward_n.shape}'
+
+        terminal_n = terminal_n.unsqueeze(-1)
         assert terminal_n.shape == (batch_size, 1), f'terminal_n.shape is {terminal_n.shape}'
 
         v_out = self.v_net.forward(next_ob_no)
@@ -161,13 +166,17 @@ class IQLCritic(BaseCritic):
 
         q_out = self.q_net.forward(ob_no) # (batch_size, action_dim)
 
-        q_out = q_out.gather(ac_na)
+        ac_na = ac_na.unsqueeze(-1)
+
+        q_out = q_out.gather(1, ac_na)
 
         assert q_out.shape == (batch_size, 1), f'q_out.shape is {q_out.shape}'
 
         v_out *= 1 - terminal_n
 
         loss = (reward_n + self.gamma * v_out - q_out) ** 2
+
+        loss = loss.mean()
 
 
         ### YOUR CODE END HERE ###
