@@ -130,13 +130,18 @@ class IQLAgent(DQNAgent):
             # reward_n = ptu.from_numpy(reward_n)
             # terminal_n = ptu.from_numpy(terminal_n)
 
-            advantage = self.estimate_advantage(ob_no, ac_na, re_n, next_ob_no, terminal_n)
+            with torch.no_grad():
+                advantage = self.estimate_advantage(ob_no, ac_na, re_n, next_ob_no, terminal_n)
 
-            dist = self.awac_actor.forward(ptu.from_numpy(ob_no))
+            dist = self.awac_actor(ptu.from_numpy(ob_no))
 
             x = dist.log_prob(ptu.from_numpy(ac_na).to(torch.long)) * torch.exp(1 / self.awac_actor.lambda_awac * advantage)
 
             actor_loss = -x.mean()
+
+            self.awac_actor.optimizer.zero_grad()
+            actor_loss.backward()
+            self.awac_actor.optimizer.step()
 
             ### YOUR CODE END HERE ###
             

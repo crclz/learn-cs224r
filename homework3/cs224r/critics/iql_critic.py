@@ -107,11 +107,11 @@ class IQLCritic(BaseCritic):
 
         assert computed_target.shape == (batch_size, 1), f'computed_target.shape is {computed_target.shape}'
 
-        prediction = self.v_net.forward(ob_no)
+        prediction = self.v_net(ob_no)
 
         assert prediction.shape == (batch_size, 1), f'prediction.shape is {prediction.shape}'
 
-        value_loss = self.expectile_loss(prediction-computed_target)
+        value_loss = self.expectile_loss(computed_target - prediction)
         assert value_loss.shape == (batch_size, 1), f'value_loss.shape is {value_loss}'
 
         value_loss = value_loss.mean()
@@ -158,13 +158,15 @@ class IQLCritic(BaseCritic):
         terminal_n = terminal_n.unsqueeze(-1)
         assert terminal_n.shape == (batch_size, 1), f'terminal_n.shape is {terminal_n.shape}'
 
-        v_out = self.v_net.forward(next_ob_no)
+        with torch.no_grad():
+            # 理论上 Q 的 target 不需要 V 的梯度
+            v_out = self.v_net(next_ob_no)
         assert v_out.shape == (batch_size, 1), f'v_out.shape is {v_out.shape}'
 
         assert 0<= terminal_n.max() <= 1
         assert 0<= terminal_n.min() <= 1
 
-        q_out = self.q_net.forward(ob_no) # (batch_size, action_dim)
+        q_out = self.q_net(ob_no) # (batch_size, action_dim)
 
         ac_na = ac_na.unsqueeze(-1)
 
