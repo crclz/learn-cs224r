@@ -144,6 +144,32 @@ class IQLCritic(BaseCritic):
         # its target reward value needs to be adjusted.
         ### YOUR CODE START HERE ###
         loss = None
+
+        assert len(ob_no.shape) == 2, f'ob_no.shape is {ob_no.shape}'
+        batch_size, ob_dim = ob_no.shape
+
+        assert next_ob_no.shape == ob_no.shape, f'next_ob_no.shape is {next_ob_no.shape}'
+
+        assert reward_n.shape == (batch_size, 1), f'reward_n.shape is {reward_n.shape}'
+        assert terminal_n.shape == (batch_size, 1), f'terminal_n.shape is {terminal_n.shape}'
+
+        v_out = self.v_net.forward(next_ob_no)
+        assert v_out.shape == (batch_size, 1), f'v_out.shape is {v_out.shape}'
+
+        assert 0<= terminal_n.max() <= 1
+        assert 0<= terminal_n.min() <= 1
+
+        q_out = self.q_net.forward(ob_no) # (batch_size, action_dim)
+
+        q_out = q_out.gather(ac_na)
+
+        assert q_out.shape == (batch_size, 1), f'q_out.shape is {q_out.shape}'
+
+        v_out *= 1 - terminal_n
+
+        loss = (reward_n + self.gamma * v_out - q_out) ** 2
+
+
         ### YOUR CODE END HERE ###
         self.optimizer.zero_grad()
         loss.backward()
