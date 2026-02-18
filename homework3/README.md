@@ -31,6 +31,26 @@ python cs224r/scripts/run_iql.py --env_name PointmassEasy-v0 \
 
 ## Runs
 
+我要哈气了，开发机比apple M3慢10000倍.
+
+```txt
+Architecture:            x86_64
+  CPU op-mode(s):        32-bit, 64-bit
+  Address sizes:         40 bits physical, 57 bits virtual
+  Byte Order:            Little Endian
+CPU(s):                  32
+  On-line CPU(s) list:   0-31
+Vendor ID:               GenuineIntel
+  Model name:            Intel(R) Xeon(R) Platinum 8336C CPU @ 2.30GHz
+    CPU family:          6
+    Model:               106
+    Thread(s) per core:  1
+    Core(s) per socket:  16
+    Socket(s):           2
+    Stepping:            6
+    BogoMIPS:            4599.99
+```
+
 
 ### 0.2
 
