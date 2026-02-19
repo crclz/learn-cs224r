@@ -84,10 +84,6 @@ class CQLCritic(BaseCritic):
         # Hint: After calculating cql_loss, augment the loss appropriately
         
         ### YOUR CODE START HERE ###
-        loss = None
-        ### YOUR CODE END HERE ###
-        self.optimizer.zero_grad()
-
         dqn_loss, qa_t_values, q_t_values = self.dqn_loss(ob_no, ac_na, next_ob_no, reward_n, terminal_n)
 
         # (batch_size, num_actions)
@@ -102,6 +98,9 @@ class CQLCritic(BaseCritic):
 
         loss = dqn_loss + cql_loss
 
+        ### YOUR CODE END HERE ###
+        self.optimizer.zero_grad()
+        loss.backward()
         self.optimizer.step()
 
         
