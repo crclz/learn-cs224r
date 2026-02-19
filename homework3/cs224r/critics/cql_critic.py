@@ -87,15 +87,29 @@ class CQLCritic(BaseCritic):
         loss = None
         ### YOUR CODE END HERE ###
         self.optimizer.zero_grad()
-        loss.backward()
+
+        dqn_loss, qa_t_values, q_t_values = self.dqn_loss(ob_no, ac_na, next_ob_no, reward_n, terminal_n)
+
+        # (batch_size, num_actions)
+        assert len(qa_t_values.shape) == 2, f'qa_t_values shape is {qa_t_values.shape}'
+
+        q_t_logsumexp = qa_t_values.exp().sum(1).log()
+
+        assert len(q_t_logsumexp.shape) == 1, f'q_t_logsumexp shape is {q_t_logsumexp.shape}'
+        assert len(q_t_values.shape) == 1, f'q_t_values.shape is {q_t_values.shape}'
+
+        cql_loss = (q_t_logsumexp - q_t_values).mean()
+
+        loss = dqn_loss + cql_loss
+
         self.optimizer.step()
 
         
         info = {'Training Loss': ptu.to_numpy(loss)}
         # TODO: Uncomment these lines after implementing CQL
-        # info['CQL Loss'] = ptu.to_numpy(cql_loss)
-        # info['Data q-values'] = ptu.to_numpy(q_t_values).mean()
-        # info['OOD q-values'] = ptu.to_numpy(q_t_logsumexp).mean()
+        info['CQL Loss'] = ptu.to_numpy(cql_loss)
+        info['Data q-values'] = ptu.to_numpy(q_t_values).mean()
+        info['OOD q-values'] = ptu.to_numpy(q_t_logsumexp).mean()
         
         self.learning_rate_scheduler.step()
 
