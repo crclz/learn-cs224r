@@ -151,3 +151,115 @@ Eval_MinReturn : -134.0
 Eval_AverageEpLen : 74.14285714285714
 Buffer size : 49001
 Done logging...
+
+
+
+## CQL
+
+```bash
+export PYTHONPATH="."
+
+alpha=0.1 # 0, 0.1
+
+python cs224r/scripts/run_cql.py --env_name PointmassHard-v0 \
+--exp_name cql_alpha_${alpha}_rnd \
+--use_rnd --unsupervised_exploration \
+--offline_exploitation --cql_alpha=${alpha}
+
+```
+
+
+### aplha=0
+
+********** Iteration 49000 ************
+
+Training agent...
+
+Beginning logging procedure...
+Timestep 49001
+mean reward (100 episodes) -57.950001
+best mean reward -57.380001
+running time 306.116581
+Train_EnvstepsSoFar : 490010
+Train_AverageReturn : -57.95000076293945
+Train_BestReturn : -57.380001068115234
+TimeSinceStart : 306.11658096313477
+Exploration Critic Loss : 273.13916015625
+Exploitation Critic Loss : 1.1551395654678345
+Exploration Model Loss : 0.00994873046875
+Exploitation Data q-values : -12.064812660217285
+Exploitation OOD q-values : -11.483360290527344
+Exploitation CQL Loss : 0.5814535617828369
+Eval_AverageReturn : -58.117645263671875
+Eval_StdReturn : 9.164396286010742
+Eval_MaxReturn : -37.0
+Eval_MinReturn : -80.0
+Eval_AverageEpLen : 59.11764705882353
+Buffer size : 10001
+Done logging...
+
+
+### alpha=0.1
+
+********** Iteration 49000 ************
+
+Training agent...
+
+Beginning logging procedure...
+Timestep 49001
+mean reward (100 episodes) -58.950001
+best mean reward -57.549999
+running time 312.260257
+Train_EnvstepsSoFar : 490010
+Train_AverageReturn : -58.95000076293945
+Train_BestReturn : -57.54999923706055
+TimeSinceStart : 312.2602570056915
+Exploration Critic Loss : 361.23126220703125
+Exploitation Critic Loss : 1.0775182247161865
+Exploration Model Loss : 0.033721923828125
+Exploitation Data q-values : -11.529438972473145
+Exploitation OOD q-values : -10.891311645507812
+Exploitation CQL Loss : 0.6381275057792664
+Eval_AverageReturn : -52.94736862182617
+Eval_StdReturn : 12.377711296081543
+Eval_MaxReturn : -41.0
+Eval_MinReturn : -96.0
+Eval_AverageEpLen : 53.94736842105263
+Buffer size : 10001
+Done logging...
+
+
+### replace rnd by random
+
+python cs224r/scripts/run_cql.py --env_name PointmassHard-v0 \
+--exp_name cql_alpha_0.1_random \
+--unsupervised_exploration \
+--offline_exploitation --cql_alpha=0.1
+
+
+********** Iteration 49000 ************
+
+Training agent...
+
+Beginning logging procedure...
+Timestep 49001
+mean reward (100 episodes) -57.070000
+best mean reward -57.070000
+running time 279.465715
+Train_EnvstepsSoFar : 490010
+Train_AverageReturn : -57.06999969482422
+Train_BestReturn : -57.06999969482422
+TimeSinceStart : 279.46571493148804
+Exploration Critic Loss : 116.45223999023438
+Exploitation Critic Loss : 0.920289158821106
+Exploration Model Loss : 0.0730438232421875
+Exploitation Data q-values : -12.949750900268555
+Exploitation OOD q-values : -12.423408508300781
+Exploitation CQL Loss : 0.5263423919677734
+Eval_AverageReturn : -59.882354736328125
+Eval_StdReturn : 16.222288131713867
+Eval_MaxReturn : -37.0
+Eval_MinReturn : -100.0
+Eval_AverageEpLen : 60.8235294117647
+Buffer size : 10001
+Done logging...
