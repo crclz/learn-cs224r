@@ -1,5 +1,5 @@
 [project]
-name = "learn-cs244r"
+name = "cs244r-hw1"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -20,4 +20,9 @@ dependencies = [
     "tensorboard==2.19.0",
     "tensorboardx==2.6.2.2",
     "torch>=2.10.0",
+]
+
+[tool.uv.workspace]
+members = [
+    "homework4/goal_conditioned_rl",
 ]
