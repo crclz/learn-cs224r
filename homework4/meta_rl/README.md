@@ -34,3 +34,23 @@ To run the RL^2 code, similarly run:
 ```
 python rl2.py exp_name -b environment=\"map\"
 ```
+
+## answer
+
+a What returns are achieved by only taking the move action to get to the goal, without riding any buses: i.e., directly walking to the goal?
+
+4step -0.3 -0.3 -0.3 +1 = 0.1
+
+b If the bus destinations (i.e., the problem ID) were known, what is the optimal returns that could be achieved in a single exploitation episode?
+
+2step: 1. walk (-0.3) 2. teleport (+1) = 0.7
+
+c Describe the exploration policy that discovers all of the bus destinations within the fewest number of timesteps.
+
+walk right -> walk right (now on map, know all bus destinations)
+
+d Given your answers in b and c, what is the optimal exploitation returns achievable by a meta-RL agent?
+
+0.7
+
+

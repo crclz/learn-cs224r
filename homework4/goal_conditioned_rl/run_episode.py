@@ -61,6 +61,8 @@ def run_episode(
         combined_input = torch.from_numpy(combined_input).unsqueeze(0)
         assert combined_input.shape == (1, 2*N), f'combined_input.shape is {combined_input.shape}'
 
+        combined_input = combined_input.float()
+
         q_out = q_net(combined_input)
         assert len(q_out.shape) == 2 and q_out.shape[0]==1, f'q_out.shape is {q_out.shape}'
         (_, n_action) = q_out.shape
@@ -88,7 +90,8 @@ def run_episode(
         # update succeeded bool from the info returned by env.step
         # Hint: Use the key 'successful_this_state' from the info dictionary
         successful_this_state = info['successful_this_state']
-        assert isinstance(successful_this_state, bool)
+
+        assert isinstance(successful_this_state, (bool, np.bool)), f'successful_this_state is {successful_this_state.__class__}'
 
         if successful_this_state:
             succeeded = True

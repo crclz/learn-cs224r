@@ -40,3 +40,11 @@ python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type random
 python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type future
 
 ![tensorboard-4](tensorboard-4.png)
+
+If implemented correctly, HER should work for the second environment, Sawyer Reach.
+Compare the performance of the Sawyer arm with and without HER. Run the following
+commands:
+python main.py --env=sawyer_reach --num_epochs=1000 --her_type no_hindsight
+python main.py --env=sawyer_reach --num_epochs=1000 --her_type final
+
+![tensorboard-5](tensorboard-5.png)
