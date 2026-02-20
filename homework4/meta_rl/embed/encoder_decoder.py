@@ -155,8 +155,18 @@ class EncoderDecoder(Embedder, relabel.RewardLabeler):
         #
         # Hint 1: all_decoder_embeddings is a tensor of size (batch_size, episode_len+1, embed_dim) 
         # such that all_decoder_embeddings[batch][t] represents g_omega(tau_{:t}).
+
+        same_shape_z = id_embeddings.detach().unsqueeze(1) # (batch_size, 1, embed_dim)
+        assert len(same_shape_z.shape) == 3, f'same_shape_z.shape is {same_shape_z.shape}'
+        assert same_shape_z.shape[1] == 1, f'same_shape_z.shape is {same_shape_z.shape}'
+
+        decoder_context_loss = (all_decoder_embeddings - same_shape_z) ** 2
+
+        assert len(decoder_context_loss.shape) == 2, f'decoder_context_loss.shape is {decoder_context_loss.shape}'
+
         # Hint 2: id_embeddings is a tensor of size (batch_size, embed_dim) such that 
         # id_embeddings[batch] represents z for that batch
+
         # Hint 3: Reminder that we want to use stop_gradient(z). The torch.tensor.detach 
         # function may be helpful.
         #
