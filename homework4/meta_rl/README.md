@@ -54,3 +54,20 @@ d Given your answers in b and c, what is the optimal exploitation returns achiev
 0.7
 
 
+## RL2
+
+a Examine the Tensorboard results under the tag reward/test in the experiments/rl2 directory. To 1 decimal place, what is the average meta-testing exploitation returns RL2 achieves after training?
+
+![rl2-curve](rl2-curve.png)
+
+0.1
+
+b Examine the videos
+- Describe the exploration: it explore randomly, without a clear target.
+- exploitation: it choose shortest path to green square.
+RL2 did not achieve the optimal return. It did not understand the map cell
+
+
+## DREAM
+
+
