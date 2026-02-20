@@ -70,4 +70,16 @@ RL2 did not achieve the optimal return. It did not understand the map cell
 
 ## DREAM
 
+c Check your implementation by running Dream
 
+![dream-curve](dream-curve.png)
+
+d Does Dream achieve optimal returns in your results
+
+test reward: expected: 0.7, actual: 0.69. yes.
+
+e Inspect the videos saved under experiments/dream/visualize/28000 or a later step
+
+exploration: most of the time, the player goes right and reach the map block, after that, go down + left.
+
+exploitation: directly go to the corresponding bus stop and teleport to the success cell
