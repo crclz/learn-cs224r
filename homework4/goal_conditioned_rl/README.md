@@ -9,3 +9,31 @@ To get working on the goal_conditioned portion you just need to activate the res
 conda deactivate
 conda activate gcrl
 ```
+
+# runs
+
+a Run the following commands:
+python main.py --env=bit_flip --num_bits=6 --num_epochs=250 --her_type no_hindsight
+python main.py --env=bit_flip --num_bits=6 --num_epochs=250 --her_type final
+
+![tensorboard-1](tensorboard-1.png)
+
+
+b Run the following commands:
+python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type no_hindsight
+python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type final
+
+![tensorboard-2](tensorboard-2.png)
+
+
+c Run the following commands:
+python main.py --env=bit_flip --num_bits=25 --num_epochs=1000 --her_type no_hindsight
+python main.py --env=bit_flip --num_bits=25 --num_epochs=1000 --her_type final
+
+
+d Finally, we will compare the three versions of HER, with the baseline of not using
+HER:
+// python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type no_hindsight
+// python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type final
+python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type random
+python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type future
