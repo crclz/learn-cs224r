@@ -79,11 +79,11 @@ def update_replay_buffer(
                 next_state = next_state.copy()
 
                 left = timestep + 1
-                right = len(episode_experience) -1
+                right = len(episode_experience)
 
                 # get random future goal
                 # Hint 1: We are currently at step 'timestep' out of a total of 
-                if not (left <= right):
+                if not (left < right):
                     break
 
 
@@ -113,7 +113,10 @@ def update_replay_buffer(
                 next_state = next_state.copy()
 
                 left = 0
-                right = len(episode_experience) -1
+                right = len(episode_experience)
+
+                if not (left < right):
+                    continue
 
                 # get random goal
                 goal_index = np.random.randint(left, right)
