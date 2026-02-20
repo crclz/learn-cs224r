@@ -160,7 +160,7 @@ class EncoderDecoder(Embedder, relabel.RewardLabeler):
         assert len(same_shape_z.shape) == 3, f'same_shape_z.shape is {same_shape_z.shape}'
         assert same_shape_z.shape[1] == 1, f'same_shape_z.shape is {same_shape_z.shape}'
 
-        decoder_context_loss = (all_decoder_embeddings - same_shape_z) ** 2
+        decoder_context_loss = torch.sum((all_decoder_embeddings - same_shape_z) ** 2, -1)
 
         assert len(decoder_context_loss.shape) == 2, f'decoder_context_loss.shape is {decoder_context_loss.shape}'
 
@@ -250,10 +250,12 @@ class EncoderDecoder(Embedder, relabel.RewardLabeler):
         
         # all_decoder_embeddings is of shape (batch_size, episode_length + 1, embed_dim)
         # all_decoder_embeddings[batch][t] represents g_omega(tau_{:t}).
-        id_embeddings = id_embeddings.detach()
-        rewards = (id_embeddings - all_decoder_embeddings[:,1:,:])**2 - (id_embeddings - all_decoder_embeddings[:,:-1,:])**2
+        same_shape_z = id_embeddings.detach().unsqueeze(1) # (batch_size, 1, embed_dim)
 
-        distances = (id_embeddings - all_decoder_embeddings[:,:-1,:]) ** 2
+        rewards =  -torch.sum((same_shape_z - all_decoder_embeddings[:,1:,:])**2, -1) + torch.sum((same_shape_z - all_decoder_embeddings[:,:-1,:])**2, -1)
+
+        distances = torch.sum((same_shape_z - all_decoder_embeddings) ** 2, -1)
+        assert len(distances.shape) == 2, f'distances.shape is {distances.shape}'
 
 
         # `distances` should be of shape (batch_size, episode_len + 1)
@@ -269,6 +271,8 @@ class EncoderDecoder(Embedder, relabel.RewardLabeler):
         # id_embeddings[batch] represents z for that batch
         # Hint 3: Remember that since we parametrize q_omega(z | tau{:t}) as a gaussian, 
         # we have that log q_omega(z | tau_{:t}) = ||stop_gradient(z) - g(\tau^e_{:t})||_2^2 + C
+        # 这里有问题！ log前面少了个负号! log likelihood越大，表示越相似，所以L2距离越小
+
         # such that C is constants independent of our weights we backprop on.
         # Hint 4: Reminder that we want to use stop_gradient(z). The torch.tensor.detach 
         # function may be helpful.
