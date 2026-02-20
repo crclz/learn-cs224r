@@ -3,11 +3,15 @@
 ## Suggestion
 
 LLM can help you understand course videos, homework pdfs, formula, math notations, and especially for cs224r.
+
 Gemini-flash (webpage version) is enough.
+
 When writing code, do not directly ask llm to write code for you. Let it check code for you, or give you some hint.
 
 对于cs224r这门课，和大模型聊天会极大帮助你理解视频、homework pdf、公式、数学符号。
+
 用gemini-flash网页版就足够了。豆包大部分时间都还行，有时有点傻逼：问它概念上的东西，它迫不及待地给你吐python代码出来。
+
 写代码的时候，不要直接让大模型给你代码，而是让它检查代码，或者给你提示。
 
 
