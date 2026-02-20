@@ -30,6 +30,7 @@ c Run the following commands:
 python main.py --env=bit_flip --num_bits=25 --num_epochs=1000 --her_type no_hindsight
 python main.py --env=bit_flip --num_bits=25 --num_epochs=1000 --her_type final
 
+![tensorboard-3](tensorboard-3.png)
 
 d Finally, we will compare the three versions of HER, with the baseline of not using
 HER:
