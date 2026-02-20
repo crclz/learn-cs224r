@@ -41,6 +41,16 @@ def run_episode(
         # Hint: state and goal_state are 1d numpy arrays of size (N,). After being
         # combined, you should have a 1d numpy array of size (2*N,)
 
+        assert len(state.shape) == 1, f'state.shape is {state.shape}'
+        assert len(goal_state.shape) == 1, f'goal_state.shape is {goal_state.shape}'
+        (N, ) = state.shape
+
+        assert goal_state.shape == (N, ), f'goal_state.shape not N={N} but: {goal_state.shape}'
+
+        combined_input = np.concatenate([state, goal_state])
+        assert combined_input.shape == (2*N,), f'combined_input.shape is {combined_input.shape}'
+
+
         # forward pass to find action
         # Hint 1: Remember that you need to pass a torch tensor into your Q Network that
         # is batched since the Q Network expects a batched input. A batch size of 1 is fine.
@@ -48,21 +58,44 @@ def run_episode(
         # such that each value represents the estimated value for taking that action. You
         # want to GREEDILY select the action based on these estimated values.
 
+        combined_input = torch.from_numpy(combined_input).unsqueeze(0)
+        assert combined_input.shape == (1, 2*N), f'combined_input.shape is {combined_input.shape}'
+
+        q_out = q_net(combined_input)
+        assert len(q_out.shape) == 2 and q_out.shape[0]==1, f'q_out.shape is {q_out.shape}'
+        (_, n_action) = q_out
+
+        greedy_action = q_out.argmax(1).item()
+        assert isinstance(greedy_action, int)
+        assert 0 <= greedy_action < n_action
+
         # take action, use env.step
         # Hint: Remember that env.step is going to return a tuple
         # (next_state, reward_this_step, done, info) where info is a dict
 
+        (next_state, reward_this_step, done, info) = env.step(greedy_action)
+
         # add transition to episode_experience as a tuple of
         # (state, action, reward, next_state, goal)
+        episode_experience.append((state, greedy_action, reward_this_step, next_state, goal_state))
 
         # update episodic return
+        episodic_return += reward_this_step
 
         # update state
+        state = next_state
 
         # update succeeded bool from the info returned by env.step
         # Hint: Use the key 'successful_this_state' from the info dictionary
+        successful_this_state = info['successful_this_state']
+        assert isinstance(successful_this_state, bool)
+
+        if successful_this_state:
+            succeeded = True
 
         # break the episode if done=True
+        if done:
+            break
 
         # ========================      END TODO       ========================
 

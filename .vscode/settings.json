@@ -3,10 +3,12 @@
         "homework1",
         "homework2/hw2/ac",
         "homework3",
+        "homework4/goal_conditioned_rl",
     ],
     "python.autoComplete.extraPaths": [
         "homework1",
         "homework2/hw2/ac",
         "homework3",
+        "homework4/goal_conditioned_rl",
     ]
 }
