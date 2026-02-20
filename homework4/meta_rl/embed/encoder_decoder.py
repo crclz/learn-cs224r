@@ -247,7 +247,15 @@ class EncoderDecoder(Embedder, relabel.RewardLabeler):
         # where
         #   rewards[batch][t] = log q_omega(z | tau_{:t + 1}) -
         #                       log q_omega(z | tau_{:t}).
-        #
+        
+        # all_decoder_embeddings is of shape (batch_size, episode_length + 1, embed_dim)
+        # all_decoder_embeddings[batch][t] represents g_omega(tau_{:t}).
+        id_embeddings = id_embeddings.detach()
+        rewards = (id_embeddings - all_decoder_embeddings[:,1:,:])**2 - (id_embeddings - all_decoder_embeddings[:,:-1,:])**2
+
+        distances = (id_embeddings - all_decoder_embeddings[:,:-1,:]) ** 2
+
+
         # `distances` should be of shape (batch_size, episode_len + 1)
         # where
         #   distances[batch][t] = -log q_omega(z | tau_{:t})
