@@ -16,6 +16,7 @@ from infrastructure import policy
 from infrastructure import relabel
 from infrastructure import rl_utils
 from infrastructure import tensorboard_utils
+import torch.mps
 
 
 def run_episode(env, policy, experience_observers=None, test=False):
@@ -180,6 +181,10 @@ def main():
     if torch.cuda.is_available():
         torch.set_default_tensor_type(torch.cuda.FloatTensor)
         device = torch.device("cuda:0")
+    elif torch.backends.mps.is_available():
+        torch.set_default_tensor_type(torch.mps.FloatTensor)
+        device = torch.device("mps")
+        print("MPS加速已启用（Apple Silicon GPU）")
 
     print(f"Device: {device}")
     tb_writer = tensorboard_utils.EpisodeAndStepWriter(os.path.join(exp_dir, "tensorboard"))
