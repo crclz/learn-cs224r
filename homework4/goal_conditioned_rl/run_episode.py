@@ -99,4 +99,7 @@ def run_episode(
 
         # ========================      END TODO       ========================
 
+        # uv run main.py --env bit_flip --num_bits 6 --num_epochs 250 --her_type no_hindsight
+        #  total reward should be above −40.0 and success rate should be 1.0
+
     return episode_experience, episodic_return, succeeded
