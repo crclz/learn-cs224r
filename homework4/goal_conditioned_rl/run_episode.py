@@ -63,7 +63,7 @@ def run_episode(
 
         q_out = q_net(combined_input)
         assert len(q_out.shape) == 2 and q_out.shape[0]==1, f'q_out.shape is {q_out.shape}'
-        (_, n_action) = q_out
+        (_, n_action) = q_out.shape
 
         greedy_action = q_out.argmax(1).item()
         assert isinstance(greedy_action, int)
@@ -99,7 +99,11 @@ def run_episode(
 
         # ========================      END TODO       ========================
 
-        # uv run main.py --env bit_flip --num_bits 6 --num_epochs 250 --her_type no_hindsight
+        # python main.py --env bit_flip --num_bits 6 --num_epochs 250 --her_type no_hindsight
         #  total reward should be above −40.0 and success rate should be 1.0
+        # 
+        # my actual run result:
+        # Epoch: 245 Cumulative reward: -31.0 Success rate: 1.0 Mean loss: 0.02881118655204773
+        # OK!
 
     return episode_experience, episodic_return, succeeded
