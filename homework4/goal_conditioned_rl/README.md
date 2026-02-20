@@ -38,3 +38,5 @@ HER:
 // python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type final
 python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type random
 python main.py --env=bit_flip --num_bits=15 --num_epochs=500 --her_type future
+
+![tensorboard-4](tensorboard-4.png)
